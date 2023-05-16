@@ -32,7 +32,7 @@ import { extract } from "zs-extract";
 import { lookup } from "mime-types";
 
 // Youtubedl @bochilteam/scraper
-import { youtubedl, youtubedlv2, youtubedlv3 } from "@bochilteam/scraper";
+import { youtubedlv2 } from "@bochilteam/scraper";
 
 // Speedtest python + exec
 import cp from "child_process";

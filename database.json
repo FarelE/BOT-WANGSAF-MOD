@@ -1,0 +1,28 @@
+{
+  "pengguna": {
+    "62882163353091@s.whatsapp.net": {
+      "chatpertama": true,
+      "registered": true,
+      "notifdaftar": false,
+      "lastclaim": 0,
+      "setWelcome": "",
+      "setLeave": "",
+      "namapet": ""
+    }
+  },
+  "database": {
+    "akinator": {}
+  },
+  "pesan": {},
+  "pengaturan": {
+    "62882163353093@s.whatsapp.net": {
+      "publik": true,
+      "autoread": false,
+      "autoketik": false,
+      "autorecord": false,
+      "autoonline": false,
+      "autooffline": false
+    }
+  },
+  "chats": {}
+}

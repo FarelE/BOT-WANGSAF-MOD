@@ -1429,7 +1429,7 @@ Hai kak ${pushname}, ini adalah list menu yang tersedia di ${namaBot}
 [4]. Menu anime
 [5]. Menu pencarian
 [6]. Menu game
-[7]. Menu pencarian
+[7]. Menu downloader
 [8]. Menu informasi
 
 Cara penggunaan [ ! ]

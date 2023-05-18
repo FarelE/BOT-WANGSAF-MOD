@@ -44,7 +44,7 @@ import axios from "axios";
 import cheerio from "cheerio";
 
 import { ai2d } from "./lib/jadianime.js";
-import { getBuffer, download, sleep, getRandom, parseMention, clockString, jsonformat } from "./lib/myfunc.js";
+import { smsg, getBuffer, download, sleep, getRandom, parseMention, clockString, jsonformat } from "./lib/myfunc.js";
 import { UploadFileUgu, webp2mp4File, TelegraPh } from "./lib/uploader.js";
 import { imageToWebp, videoToWebp, writeExifImg, writeExifVid, writeExif, addExif } from "./lib/exif.js";
 
@@ -3039,6 +3039,18 @@ await sleep(1000)
         reply(anu)
         }
         break
+case 'broadcast': case 'bcgc': {
+if (!isOwner) return untukowner();
+let bc = Object.keys(global.db.pengguna)
+let cc = await smsg(sock, text ? m : m.quoted ? await m.quoted.fakeObj : false || m)
+let cck = text ? text : cc.text
+for (let i of anu) {
+await sleep(1500)
+await sock.copyNForward(i, sock.cMod(m.chat, cc, /|broadcast|bcgc/i.test(cck) ? cck : `*Broadcast*\n\n ${cck}`), true).catch(_ => _)
+}
+berhasil()
+}
+break
         case 'kon': {
         let fotoProfil = await genProfile(sock, m)
         sock.sendMessage(m.chat, { image: await resize(fotoProfil, 480, 270) }, { quoted: m })

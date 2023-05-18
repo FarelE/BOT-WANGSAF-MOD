@@ -3041,7 +3041,7 @@ await sleep(1000)
         break
 case 'broadcast': case 'bcgc': {
 if (!isOwner) return untukowner();
-let bc = Object.keys(global.db.pengguna)
+let anu = Object.keys(global.db.pengguna)
 let cc = await smsg(sock, text ? m : m.quoted ? await m.quoted.fakeObj : false || m)
 let cck = text ? text : cc.text
 for (let i of anu) {

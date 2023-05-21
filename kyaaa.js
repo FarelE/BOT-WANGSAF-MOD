@@ -3042,12 +3042,24 @@ await sleep(1000)
 case 'broadcast': case 'bcgc': {
 if (!isOwner) return untukowner();
 let anu = Object.keys(global.db.pengguna)
+
+let getGroups = await sock.groupFetchAllParticipating()
+let groups = Object.entries(getGroups).slice(0).map(entry => entry[1])
+let anugc = groups.map(v => v.id)
+
 let cc = await smsg(sock, text ? m : m.quoted ? await m.quoted.fakeObj : false || m)
 let cck = text ? text : cc.text
+
 for (let i of anu) {
 await sleep(1500)
 await sock.copyNForward(i, sock.cMod(m.chat, cc, /|broadcast|bcgc/i.test(cck) ? cck : `*Broadcast*\n\n ${cck}`), true).catch(_ => _)
 }
+
+for (let i of anugc) {
+await sleep(1500)
+await sock.copyNForward(i, sock.cMod(m.chat, cc, /|broadcast|bcgc/i.test(cck) ? cck : `*Broadcast*\n\n ${cck}`), true).catch(_ => _)
+}
+
 berhasil()
 }
 break

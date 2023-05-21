@@ -957,7 +957,6 @@ async function tebakanime() {
     let collect = { r: [], anime: [] }
     $('table > tbody > tr > td').each(function (i, e) {
         let txt = $(e).find('a').text().trim()
-        let url
         let url = $(e).find('img').attr('data-srcset') ? $(e).find('img').attr('data-srcset') : $(e).find('a').attr('href')
         let low = url ? url.replace('https://', '').split('/')[1] : ''
         collect[low]?.push({ text: txt.replace(',', ''), url })

@@ -11,6 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "@adiwajshing/baileys": "github:WhiskeySockets/Baileys",
+    "node_characterai": "github:FarelE/node_characterai_edited",
     "@adiwajshing/keyed-db": "^0.2.4",
     "@bochilteam/scraper": "^4.0.22-alpha.0",
     "@hapi/boom": "^10.0.0",
@@ -48,6 +49,7 @@
     "string-similarity": "^4.0.4",
     "util": "^0.12.5",
     "uuid": "^9.0.0",
+    "ytdl-core": "^4.11.2",
     "zs-extract": "^1.4.2"
   },
   "directories": {

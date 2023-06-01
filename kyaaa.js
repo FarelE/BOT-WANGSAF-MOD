@@ -975,6 +975,7 @@ tunggu()
                   await sleep(1000)
                 let media = await quoted.download()
                 let encmedia = await sock.sendImageAsSticker(m.chat, media, m, { packname: namaBot, author: namaOwner })
+                confirmlimit(sender, 1) // Memakai 1 limit
                 await fs.unlinkSync(encmedia)
             } else if (/video/.test(mime)) {
 tunggu()

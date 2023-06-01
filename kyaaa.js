@@ -669,7 +669,6 @@ await sleep(1000)
                 let media = await sock.downloadAndSaveMediaMessage(quoted)
                 let webpToMp4 = await webp2mp4File(media)
                 await sock.sendMessage(m.chat, { video: { url: webpToMp4.result } }, { quoted: m })
-                confirmlimit(sender, 1) // Memakai 1 limit
                 await fs.unlinkSync(media)
             }
             break
@@ -682,7 +681,6 @@ tunggu()
                   await sleep(1000)
                 let media = await quoted.download()
                 let encmedia = await sock.sendImageAsSticker(m.chat, media, m, { packname: namaBot, author: namaOwner })
-                confirmlimit(sender, 1) // Memakai 1 limit
                 await fs.unlinkSync(encmedia)
             } else if (/video/.test(mime)) {
 tunggu()
@@ -690,7 +688,6 @@ tunggu()
                 if ((quoted.msg || quoted).seconds > 11) return reply('Maksimal 10 detik!')
                 let media = await quoted.download()
                 let encmedia = await sock.sendVideoAsSticker(m.chat, media, m, { packname: namaBot, author: namaOwner })
-                confirmlimit(sender, 1) // Memakai 1 limit
                 await fs.unlinkSync(encmedia)
             } else {
                 stiktutor2()

@@ -453,27 +453,6 @@ const sendFileFromUrl = async (anunya, url, caption, men) => {
     }
 };
 
-async function sendSticker(data){
-   let ran = await getRandom('.webp')
-            exec(`ffmpeg -i ${data} ${ran}`, (err) => {
-     	exec(`webpmux -set exif ./lib/data.exif ./${ran} -o ./${ran}`, async (error) => {
-     	let anu = Buffer.isBuffer(ran) ? ran : /^data:.*?\/.*?;base64,/i.test(ran) ? Buffer.from(ran.split`,`[1], 'base64') : /^https?:\/\//.test(ran) ? await (await getBuffer(ran)) : fs.existsSync(ran) ? fs.readFileSync(ran) : Buffer.alloc(0)        
-				    sock.sendMessage(from, { sticker: anu }, { quoted: m })
-				 fs.unlinkSync(`./${data}`)
-				 fs.unlinkSync(`./${ran}`)
-			         })})}
-
-if (!/webp/.test(mime) && /image/.test(mime)) {
-let p = await sock.downloadAndSaveMediaMessage(quoted)
-sendSticker(p)
-}
-
-if (!/webp/.test(mime) && /video/.test(mime)) {
-let p = await sock.downloadAndSaveMediaMessage(quoted)
-if (qmsg.seconds > 10) return reply ('Maksimal video untuk dijadikan sticker adalah 10 detik')
-sendSticker(p)
-}
-
 /*
 // DOWNLOAD YTMP4
 const downloadMp4 = async (Link) => {

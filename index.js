@@ -314,6 +314,7 @@ const unhandledRejections = new Map();
         await sock.sendMessage(jid, { sticker: { url: buffer }, ...options }, { quoted })
         return buffer
     }
+    }
 
     /**
      * 

@@ -49,7 +49,6 @@
     "string-similarity": "^4.0.4",
     "util": "^0.12.5",
     "uuid": "^9.0.0",
-    "ytdl-core": "^4.11.2",
     "zs-extract": "^1.4.2"
   },
   "directories": {

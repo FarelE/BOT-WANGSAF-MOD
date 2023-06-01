@@ -486,6 +486,83 @@ console.log(color(err))
 }
 */
 
+// By FarelAE
+function otakudesubaru() { // By FarelAE
+const url = 'https://otakudesu.lol/ongoing-anime/'
+return new Promise((resolve, reject) => {
+axios.get(url)
+.then(({ data }) => {
+const $ = cheerio.load(data)
+const hasil = []
+$('.thumb').each(function(a, p) {
+hasil.push({
+gambar: $(p).find('img').attr('src'),
+judul: $(p).find('.thumbz > h2').text().trim(),
+link: $(p).find('a').attr('href')
+})
+})
+resolve(hasil)
+}).catch(reject)
+})
+}
+
+function otakudesucari(text) { // By FarelAE
+const url = `https://otakudesu.lol/?s=${text}&post_type=anime`
+return new Promise((resolve, reject) => {
+axios.get(url)
+.then(({ data }) => {
+const $ = cheerio.load(data)
+const hasil = []
+$('#venkonten > div > div.venser > div > div > ul > li').each(function(a, p) {
+hasil.push({
+gambar: $(p).find('img').attr('src'),
+judul: $(p).find('h2 > a').text().trim(),
+link: $(p).find('h2 > a').attr('href')
+})
+})
+resolve(hasil)
+}).catch(reject)
+})
+}
+	
+function otakudesueps(link) { // By @ihsanafajar
+return new Promise((resolve, reject) => {
+axios.get(link)
+.then(({ data }) => {
+const $ = cheerio.load(data)
+const hasil = []
+$('#venkonten > div.venser > div:nth-child(8) > ul > li').each(function(a, p) {
+hasil.push({
+judul: $(p).find('span:nth-child(1) > a').text(),
+link: $(p).find('span:nth-child(1) > a').attr('href')
+})
+})
+resolve(hasil)
+}).catch(reject)
+})
+}
+
+function otakudeslinkudown(link) { // By @ihsanafajar
+return new Promise((resolve, reject) => {
+axios.get(link)
+.then(({ data }) => {
+const $ = cheerio.load(data)
+const hasil = {}
+hasil.title = $('#venkonten > div.venser > div.venutama > div.download > h4').text()
+hasil.download = {}
+$('#venkonten > div.venser > div.venutama > div.download > ul > li').each(function(a, b){
+let quality = $(b).find('strong').text().split(' ').find(s => s.endsWith('p'))
+hasil.download['q_' + quality] = {}
+$(b).find('a').each(function(){
+hasil.download['q_' + quality].name ? hasil.download['q_' + quality] : hasil.download['q_' + quality].name = quality
+hasil.download['q_' + quality][$(this).text().toLowerCase().trim()] = $(this).attr('href')
+})
+})
+resolve(hasil)
+}).catch(reject)
+})
+}
+
       const gambar = fs.readFileSync(`./tamnel.jpg`)
       const imgowner = fs.readFileSync(`./owner.jpg`)
       const teksucapan = `(￣▽￣)ゞ Hai @${sender.split("@")[0]}\n\nKenalin nih aku ${namaBot}\n\nUntuk melihat fitur apa yang aku punya\n*Ketik ${prefix}menu yah*\n\n\nBot ini sepenuhnya dijalankan oleh komputer atau sistem otomatis`
@@ -644,6 +721,222 @@ sock.sendMessage(from, buttonMessage)
         }
 
         switch (command) {
+        case 'anime': {
+if (!text) { // Ketika menggunakan command tanpa kata kunci
+        let ongonging = await otakudesubaru()
+        let acakgmbr = ongonging[Math.floor(Math.random() * ongonging.length)]
+        //let gmbrnya = await exec(`curl https://api.cloudinary.com/v1_1/demo/image/create_collage -X POST --data 'public_id=test_collage&resource_type=image&manifest_json={"template": "grid","width": 500,"height": 500,"columns": 3,"rows": 3, "spacing": 1,"color": "blue","assetDefaults": { "kind": "upload", "crop": "fill", "gravity": "auto"},"assets": [{ "media": "${ongonging[0].gambar}" }, { "media": "${ongonging[1].gambar}" },{ "media": "${ongonging[2].gambar}" }, { "media": "${ongonging[3].gambar}" },{ "media": "${ongonging[4].gambar}" },{ "media": "${ongonging[5].gambar}" }, { "media": "${ongonging[6].gambar}" }, { "media": "${ongonging[7].gambar}" },{ "media": "${ongonging[8].gambar}" }]}&timestamp=173719931&api_key=436464676&signature=a781d61f86a6f818af'`)
+        let randh = getRandom('.jpg')
+        let resImage = `./${randh}`
+        exec(`montage "${ongonging[0].gambar}" "${ongonging[1].gambar}" "${ongonging[2].gambar}" "${ongonging[3].gambar}" "${ongonging[4].gambar}" "${ongonging[5].gambar}" "${ongonging[6].gambar}" "${ongonging[7].gambar}" "${ongonging[8].gambar}" "${ongonging[9].gambar}" "${ongonging[10].gambar}" "${ongonging[11].gambar}" \ -geometry 340x480+5+5 '${resImage}'`, async(err) => {
+        let inihasil = fs.readFileSync(resImage)
+        await sleep(5000)
+        let resImagebuf = await Jimp.read(resImage)
+        let kurangres = await resize(resImagebuf, 360, 360)
+        let nomor = 0
+        let teksanim = `*ANIME TERBARU*\n\n`
+        let textandown = `*SILAHKAN SALIN TEKS DI BAWAH INI UNTUK MENDOWNLOAD*`
+        for (let oy of ongonging) {
+        teksanim += `${nomor+=1}. ${oy.judul}\n`
+        }
+        teksanim += `\n${textandown}`
+        const quotedanim = await sock.sendMessage(from, { image: kurangres, caption: teksanim }, { quoted: m })
+        fs.unlinkSync(resImage)
+/*let list_rows = [];
+for (let ha of ongonging) {
+list_rows.push({
+title: ha.judul, rowId: `${prefix}anime2 ${ha.link}`})
+}
+const sections = [
+    {
+	title: wm,
+	rows: list_rows
+	 },]
+   const listMessage = {
+  text: tkslist,
+  footer: "",
+  // title: "",
+  buttonText: teksbutlist,
+  sections
+}
+await sleep(5000)
+sock.sendMessage(m.sender, listMessage, { quoted: quotedanim })*/
+
+for (let ha of ongonging) {
+sleep(5000)
+reply(`${prefix}anime2 ${ha.link}`)
+}
+
+})
+        }
+if (text) { // Ketika menggunakan command dengan kata kunci
+let carianime = await otakudesucari(text)
+/*let list_rows = [];
+for (let otakudesu of carianime) {
+list_rows.push({
+title: otakudesu.judul, rowId: `${prefix}anime2 ${otakudesu.link}`})
+}
+const sections = [
+    {
+	title: wm,
+	rows: list_rows
+	 },]
+   const listMessage = {
+  text: tkslist,
+  footer: "",
+  // title: "",
+  buttonText: teksbutlist,
+  sections
+}
+sock.sendMessage(m.sender, listMessage, { quoted: m })*/
+
+reply('*SILAHKAN SALIN TEKS DI BAWAH INI UNTUK MENDOWNLOAD*')
+await sleep(3000)
+for (let otakudesu of carianime) {
+sleep(5000)
+reply(`${prefix}anime2 ${otakudesu.link}`)
+}
+
+        }
+        }
+        break
+case 'anime2': {
+let epsanime = await otakudesueps(text)
+/*let list_rows = [];
+for (let otakudesu of epsanime) {
+list_rows.push({
+title: otakudesu.judul, rowId: `${prefix}anime3 ${otakudesu.link}`})
+}
+const sections = [
+    {
+	title: wm,
+	rows: list_rows
+	 },]
+   const listMessage = {
+  text: tkslist,
+  footer: "",
+  // title: "",
+  buttonText: teksbutlist,
+  sections
+}
+sock.sendMessage(m.sender, listMessage, { quoted: m })*/
+
+let teksanim = `*LINK EPISODE*\n\nSilahkan ketik ${prefix}anime3 <url>\n\nContoh:\n.anime3 https://otakudesu.lol/episode/wpoiec-episode-1063-sub-indo/\n\n------------------------------------------------------------------\n\n`
+for (let otakudesu of epsanime) {
+teksanim += `${otakudesu.link}\n\n`
+}
+reply(teksanim)
+}
+break
+case 'anime3': {
+let downanime = await otakudeslinkudown(text)
+/*const listresolusi = [
+    {
+	title: "Download resolusi 360p",
+	rows: [
+	    {title: `${downanime.title} 360p`, rowId: `${prefix}animdl ${text} 360p`, description: ""},
+	]
+    },
+    {
+	title: "Download resolusi 480p",
+	rows: [
+	    {title: `${downanime.title} 480p`, rowId: `${prefix}animdl ${text} 480p`, description: ""},
+	]
+    },
+    {
+	title: "Download resolusi 720p",
+	rows: [
+	    {title: `${downanime.title} 720p`, rowId: `${prefix}animdl ${text} 720p`, description: ""},
+	]
+    },
+    {
+	title: "Download resolusi 1080p",
+	rows: [
+	    {title: `${downanime.title} 1080p`, rowId: `${prefix}animdl ${text} 1080p`, description: ""},
+	]
+    },
+]
+
+  const listmsgresolusi = {
+  text: tkslist,
+  footer: ``,
+  title: ``,
+  buttonText: teksbutlist,
+  sections: listresolusi
+}
+await sock.sendMessage(m.sender, listmsgresolusi, { quoted: m })*/
+
+reply(`${prefix}animdl ${text} 360p`)
+sleep(5000)
+reply(`${prefix}animdl ${text} 480p`)
+sleep(5000)
+reply(`${prefix}animdl ${text} 720p`)
+sleep(5000)
+reply(`${prefix}animdl ${text} 1080p`)
+sleep(3000)
+reply(`Jika resolusi 1080p tidak berfungsi, cobalah resolusi 720p atau yang lainnya`)
+
+}
+break
+/*
+case 'animdl': {
+async function downAnim(link) {
+try {
+    let res = await extract(link)
+    let mimetype = await lookup(res.download)
+    sock.sendMessage(m.chat, { document: { url: res.download }, fileName: res.filename, mimetype }, { quoted: m })
+    } catch {
+        reply(`Maaf kak, link download tidak tersedia`)
+    }
+}
+const aku = await otakudeslinkudown(args[0])
+if (args[1] === '360p') {
+let anu = await fetch(aku.download.q_360p.zippy ? aku.download.q_360p.zippy : aku.download.q_360p.zippyshare)
+await downAnim(anu.url)
+} else if (args[1] === '480p') {
+let anu = await fetch(aku.download.q_480p.zippy ? aku.download.q_480p.zippy : aku.download.q_480p.zippyshare)
+await downAnim(anu.url)
+} else if (args[1] === '720p') {
+let anu = await fetch(aku.download.q_720p.zippy ? aku.download.q_720p.zippy : aku.download.q_720p.zippyshare)
+await downAnim(anu.url)
+} else if (args[1] === '1080p') {
+let anu = await fetch(aku.download.q_1080p.zippy ? aku.download.q_1080p.zippy : aku.download.q_1080p.zippyshare)
+await downAnim(anu.url)
+}
+}
+break
+*/
+
+/*
+{
+  name: '360p',
+  otakufiles: 'https://desudrive.com/link/?id=eVYzczJaUk9LU0lMM0VhR0pzRDdYUVI2MkZkUmk1aEtlcVdIaVFGYU5zbVZsdytqWUk1RmJBOEY1dE1EOE5GYnp0a2dibnFVY1A2a29MakNNektDUkpqK2kzakd6cVdKUUE9PQ==',
+  pdrain: 'https://desudrive.com/link/?id=eVYzczJaUk9LU0lVd1YrSVA4TGdVQWhuMkZwYmtwaGVZNjJQb25JUEJwU0Y=',
+  acefile: 'https://desudrive.com/link/?id=eVYzczJaUk9LU0lGeTBLTE9zcjNId0ptMlY4YnhvQVNlL2pjMHdWR0k5T1dqUURvU29sUktoWU83LzhUcEpCSGtLdFZCUXYwZE9QNXZlVHROQT09',
+  racaty: 'https://desudrive.com/link/?id=eVYzczJaUk9LU0lXeVVTTUo5KzhXQTRta1V4Y2pJZGNKdjZIMEZRVA==',
+  mega: 'https://desudrive.com/link/?id=eVYzczJaUk9LU0lKelVDTWZjam9IZ2RnbWx3YnlOa2ZmcWV5b1haS1BkREdnajYvYUo1aVRrMGo3TWxQdHZWYWt1VlNjQ0tXTFlEYm84cnVkVWlBWXZuNXFYeWVsZUN6ZFE9PQ==',
+  megaup: 'https://desudrive.com/link/?id=eVYzczJaUk9LU0lKelVDTUp0YThYd1I5MlF0T3g5SmNZNFNjZ1Z3Y0tNS0VrMXZnUUpaN1FpQlAwSkpiODQwRi9iVlRCQ1RwTDZPOQ==',
+  kfiles: 'https://desudrive.com/link/?id=eVYzczJaUk9LU0lQMmthR05zajBXQTFzaFJkWGtOb0VPcUtObHhnTkZPcVExei8rVGE5U0tCd0k3OFZZdHNsWnpnPT0='
+}
+*/
+
+case 'animdl': { // By FarelAE
+const aku = await otakudeslinkudown(args[0])
+if (args[1] === '360p') {
+let anu = await aku.download.q_360p
+reply(util.format(anu).replace(/{/g, "").replace(/}/g, "").replace(/  name: '360p',/g, "").replace(/ /g, "").replace(/',/g, "\n").replace(/'/g, "\n"))
+} else if (args[1] === '480p') {
+let anu = await aku.download.q_480p
+reply(util.format(anu).replace(/{/g, "").replace(/}/g, "").replace(/  name: '480p',/g, "").replace(/ /g, "").replace(/',/g, "\n").replace(/'/g, "\n"))
+} else if (args[1] === '720p') {
+let anu = await aku.download.q_720p
+reply(util.format(anu).replace(/{/g, "").replace(/}/g, "").replace(/  name: '720p',/g, "").replace(/ /g, "").replace(/',/g, "\n").replace(/'/g, "\n"))
+} else if (args[1] === '1080p') {
+let anu = await aku.download.q_1080p
+reply(util.format(anu).replace(/{/g, "").replace(/}/g, "").replace(/  name: '1080p',/g, "").replace(/ /g, "").replace(/',/g, "\n").replace(/'/g, "\n"))
+}
+}
+break
                         case 'toimage': case 'toimg': { // Membutuhkan ffmpeg
                 if (!quoted) return stiktutor1()
                 if (!/webp/.test(mime)) return stiktutor1()
@@ -654,7 +947,8 @@ await sleep(1000)
                 exec(`ffmpeg -i ${media} ${ran}`, (err) => {
                     fs.unlinkSync(media)
                     if (err) return reply(`${err}`)
-                    let buffer = fs.readFileSync(ran)
+                    let buffer1 = fs.readFileSync(ran)
+                    let buffer = await resize(buffer, 200, 200)
                     sock.sendMessage(m.chat, { image: buffer }, { quoted: m })
                     fs.unlinkSync(ran)
                 })

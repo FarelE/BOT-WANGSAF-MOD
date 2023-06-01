@@ -309,10 +309,7 @@ const unhandledRejections = new Map();
         let buff = Buffer.isBuffer(path) ? path : /^data:.*?\/.*?;base64,/i.test(path) ? Buffer.from(path.split`,`[1], 'base64') : /^https?:\/\//.test(path) ? await (await getBuffer(path)) : fs.existsSync(path) ? fs.readFileSync(path) : Buffer.alloc(0)
         let buffer
         if (options && (options.packname || options.author)) {
-            buffer = await writeExifImg(buff, options)
-        } else {
-            buffer = await imageToWebpreso(buff, reso)
-        }
+            let buffer = await imageToWebpreso(buff, reso)
 
         await sock.sendMessage(jid, { sticker: { url: buffer }, ...options }, { quoted })
         return buffer

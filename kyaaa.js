@@ -989,6 +989,21 @@ tunggu()
                 }
             }
             break
+                        case 'stickerburik': case 'sburik': case 'stickergifburik': case 'sgifburik': {
+                        if (!isPremium && checklimitUser(sender) <= 0) return limithabis()
+            if (!isMedia) return stiktutor2()
+            if (!quoted) return stiktutor2()
+            if (!text) return reply(`Silahkan masukan tingkat resolusi dari sticker\n\nContoh:\n${prefix}sburik 50`
+                if (/image/.test(mime)) {
+tunggu()
+                  await sleep(1000)
+                let media = await quoted.download()
+                let nganu = text
+                let encmedia = await sock.sendImageAsStickerburik(m.chat, media, nganu, m, { packname: namaBot, author: namaOwner })
+                await fs.unlinkSync(encmedia)
+                }
+                }
+                break
          default:
          /*
 if (isCmd) {

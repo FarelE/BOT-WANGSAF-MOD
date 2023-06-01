@@ -6,7 +6,7 @@ import FileType from "file-type";
 import kyaaa from "./kyaaa.js";
 const { default: WASocket, Browsers, useMultiFileAuthState, DisconnectReason, fetchLatestBaileysVersion, makeInMemoryStore, jidDecode, downloadContentFromMessage, generateWAMessageFromContent, generateForwardMessageContent, getContentType, generateWAMessage, proto } = (await import('@adiwajshing/baileys')).default
 import { smsg, getBuffer } from "./lib/myfunc.js";
-import { imageToWebp, videoToWebp, writeExifImg, writeExifVid, writeExif, imageToWebpreso } from "./lib/exif.js";
+import { imageToWebp, videoToWebp, writeExifImg, writeExifVid, writeExif } from "./lib/exif.js";
 const setting = JSON.parse(fs.readFileSync('./setting.json'));
 const { owner } = setting;
 import { welkom } from "./lib/welkom.js";
@@ -303,17 +303,6 @@ const unhandledRejections = new Map();
 
         await sock.sendMessage(jid, { sticker: { url: buffer }, ...options }, { quoted })
         return buffer
-    }
-    
-    sock.sendImageAsStickerburik = async (jid, path, reso, quoted, options = {}) => {
-        let buff = Buffer.isBuffer(path) ? path : /^data:.*?\/.*?;base64,/i.test(path) ? Buffer.from(path.split`,`[1], 'base64') : /^https?:\/\//.test(path) ? await (await getBuffer(path)) : fs.existsSync(path) ? fs.readFileSync(path) : Buffer.alloc(0)
-        let buffer
-        if (options && (options.packname || options.author)) {
-            let buffer = await imageToWebpreso(buff, reso)
-
-        await sock.sendMessage(jid, { sticker: { url: buffer }, ...options }, { quoted })
-        return buffer
-    }
     }
 
     /**

@@ -159,6 +159,7 @@ export default async (sock, m, chatUpdate, store) => {
         const quoted = m.quoted ? m.quoted : m
         const mime = (quoted.msg || quoted).mimetype || ''
 	    const isMedia = /image|video|sticker|audio/.test(mime)
+	    const qmsg = (quoted.msg || quoted)
 	    
 	    const isRegister = register.includes(m.sender)
 	    const isPremium = premiumnya.checkPremiumUser(sender, premium)
@@ -486,6 +487,30 @@ console.log(color(err))
 }
 */
 
+if (!/webp/.test(mime) && /image/.test(mime)) {
+
+                let media = await sock.downloadAndSaveMediaMessage(quoted)
+                let ran = await getRandom('.png')
+                exec(`ffmpeg -i ${media} ${ran}`, (err) => {
+                    fs.unlinkSync(media)
+                    if (err) return reply(`${err}`)
+                    let buffer = fs.readFileSync(ran)
+                    sock.sendMessage(m.chat, { image: buffer }, { quoted: m })
+                    fs.unlinkSync(ran)
+                })
+
+}
+
+if (!/webp/.test(mime) && /video/.test(mime)) {
+//if (qmsg.seconds > 10) return reply('Minimal 10 Detik')
+
+                if ((quoted.msg || quoted).seconds > 11) return reply('Maksimal video untuk dijadikan sticker adalah 10 detik!')
+                let media = await quoted.download()
+                let encmedia = await sock.sendVideoAsSticker(m.chat, media, m, { packname: namaBot, author: namaOwner })
+                await fs.unlinkSync(encmedia)
+
+}
+
       const gambar = fs.readFileSync(`./tamnel.jpg`)
       const imgowner = fs.readFileSync(`./owner.jpg`)
       const teksucapan = `(￣▽￣)ゞ Hai @${sender.split("@")[0]}\n\nKenalin nih aku ${namaBot}\n\nUntuk melihat fitur apa yang aku punya\n*Ketik ${prefix}menu yah*\n\n\nBot ini sepenuhnya dijalankan oleh komputer atau sistem otomatis`
@@ -661,7 +686,6 @@ await sleep(1000)
             }
             break
 	        case 'tomp4': case 'tovideo': {
-	        if (!isPremium && checklimitUser(sender) <= 0) return limithabis()
                 if (!quoted) return stiktutor1()
                 if (!/webp/.test(mime)) return stiktutor1()
             tunggu()
@@ -673,7 +697,6 @@ await sleep(1000)
             }
             break
                         case 'sticker': case 's': case 'stickergif': case 'sgif': {
-                        if (!isPremium && checklimitUser(sender) <= 0) return limithabis()
             if (!isMedia) return stiktutor2()
             if (!quoted) return stiktutor2()
                 if (/image/.test(mime)) {

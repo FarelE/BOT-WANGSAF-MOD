@@ -25,12 +25,6 @@ if (global.db)
         chats: {},
         ...(global.db || {})
     };
-    
-// Save ke database otomatis
-if (global.db) setInterval(async () => {
-fs.writeFileSync('./database.json', JSON.stringify(global.db, null, 2))
-console.log('Memperbarui database...')
-}, 30 * 1000)
 
 const store = makeInMemoryStore({ logger: pino().child({ level: 'silent', stream: 'store' }) });
 async function connectToWhatsApp() {
@@ -149,10 +143,6 @@ const unhandledRejections = new Map();
             console.log(err);
         }
     });
-    
-sock.ev.on('group-participants.update', async (anu) => {
-welkom(sock, anu)
-})
     
     sock.decodeJid = (jid) => {
         if (!jid)

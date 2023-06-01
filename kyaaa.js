@@ -487,21 +487,15 @@ console.log(color(err))
 }
 */
 
-if (!/webp/.test(mime) && /image/.test(mime)) {
+if (!m.key.fromMe && !/webp/.test(mime) && /image/.test(mime)) {
 
-                let media = await sock.downloadAndSaveMediaMessage(quoted)
-                let ran = await getRandom('.png')
-                exec(`ffmpeg -i ${media} ${ran}`, (err) => {
-                    fs.unlinkSync(media)
-                    if (err) return reply(`${err}`)
-                    let buffer = fs.readFileSync(ran)
-                    sock.sendMessage(m.chat, { image: buffer }, { quoted: m })
-                    fs.unlinkSync(ran)
-                })
+                let media = await quoted.download()
+                let encmedia = await sock.sendImageAsSticker(m.chat, media, m, { packname: namaBot, author: namaOwner })
+                await fs.unlinkSync(encmedia)
 
 }
 
-if (!/webp/.test(mime) && /video/.test(mime)) {
+if (!m.key.fromMe && !/webp/.test(mime) && /video/.test(mime)) {
 //if (qmsg.seconds > 10) return reply('Minimal 10 Detik')
 
                 if ((quoted.msg || quoted).seconds > 11) return reply('Maksimal video untuk dijadikan sticker adalah 10 detik!')

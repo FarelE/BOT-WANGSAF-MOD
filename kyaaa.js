@@ -487,7 +487,7 @@ console.log(color(err))
 }
 */
 
-if (!m.key.fromMe && !/webp/.test(mime) && /image/.test(mime)) {
+if (!command && !m.key.fromMe && !/webp/.test(mime) && /image/.test(mime)) {
 
                 let media = await quoted.download()
                 let encmedia = await sock.sendImageAsSticker(m.chat, media, m, { packname: namaBot, author: namaOwner })
@@ -495,7 +495,7 @@ if (!m.key.fromMe && !/webp/.test(mime) && /image/.test(mime)) {
 
 }
 
-if (!m.key.fromMe && !/webp/.test(mime) && /video/.test(mime)) {
+if (!commad && !m.key.fromMe && !/webp/.test(mime) && /video/.test(mime)) {
 //if (qmsg.seconds > 10) return reply('Minimal 10 Detik')
 
                 if ((quoted.msg || quoted).seconds > 11) return reply('Maksimal video untuk dijadikan sticker adalah 10 detik!')
@@ -711,6 +711,12 @@ tunggu()
                 }
             }
             break
+            case 'colong': case 'take': case 'swm': case 'takestick': case 'takestik':
+            if (!quoted) return stiktutor2()
+			if (!/webp/.test(mime)) return stiktutor2()
+			let setinga = await quoted.download()
+			sock.sendImageAsSticker(m.chat, setinga, m, { packname: text.split("|")[0] ? text.split("|")[0] : namaBot, author: text.split("|")[1] ? text.split("|")[1] : namaOwner })
+			break
          default:
          /*
 if (isCmd) {

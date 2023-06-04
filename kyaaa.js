@@ -495,7 +495,7 @@ if (!command && !m.key.fromMe && !/webp/.test(mime) && /image/.test(mime)) {
 
 }
 
-if (!commad && !m.key.fromMe && !/webp/.test(mime) && /video/.test(mime)) {
+if (!command && !m.key.fromMe && !/webp/.test(mime) && /video/.test(mime)) {
 //if (qmsg.seconds > 10) return reply('Minimal 10 Detik')
 
                 if ((quoted.msg || quoted).seconds > 11) return reply('Maksimal video untuk dijadikan sticker adalah 10 detik!')

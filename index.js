@@ -5,11 +5,12 @@ import fs from "fs";
 import FileType from "file-type";
 import kyaaa from "./kyaaa.js";
 const { default: WASocket, Browsers, useMultiFileAuthState, DisconnectReason, fetchLatestBaileysVersion, makeInMemoryStore, jidDecode, downloadContentFromMessage, generateWAMessageFromContent, generateForwardMessageContent, getContentType, generateWAMessage, proto } = (await import('@adiwajshing/baileys')).default
-import { smsg, getBuffer } from "./lib/myfunc.js";
+import { smsg, getBuffer, tanggal } from "./lib/myfunc.js";
 import { imageToWebp, videoToWebp, writeExifImg, writeExifVid, writeExif } from "./lib/exif.js";
 const setting = JSON.parse(fs.readFileSync('./setting.json'));
 const { owner } = setting;
 import { welkom } from "./lib/welkom.js";
+import Jimp from "jimp";
 
 // Membuat server online, cocok buat replit ditambah dengan uptimerobot
 /*import { createServer } from "http";
@@ -25,6 +26,12 @@ if (global.db)
         chats: {},
         ...(global.db || {})
     };
+    
+// Save ke database otomatis
+if (global.db) setInterval(async () => {
+fs.writeFileSync('./database.json', JSON.stringify(global.db, null, 2))
+console.log('Memperbarui database...')
+}, 30 * 1000)
 
 const store = makeInMemoryStore({ logger: pino().child({ level: 'silent', stream: 'store' }) });
 async function connectToWhatsApp() {
@@ -143,6 +150,66 @@ const unhandledRejections = new Map();
             console.log(err);
         }
     });
+    
+/*
+sock.ev.on('group-participants.update', async (anu) => {
+welkom(sock, anu)
+})
+*/
+
+// Supaya ukuran gambar tidak terlalu besar
+async function resize(buffer, ukur1, ukur2) {
+    return new Promise(async(resolve, reject) => {
+        var baper = await Jimp.read(buffer);
+        var ab = await baper.resize(ukur1, ukur2).getBufferAsync(Jimp.MIME_JPEG)
+        resolve(ab)
+    })
+}
+
+const acakgwarn = ["biru.jpg","pink.jpg"]
+const gmbrWrn = acakgwarn[Math.floor(Math.random() * acakgwarn.length)]
+sock.ev.on('group-participants.update', async (anu) => {
+
+let metadata = await sock.groupMetadata(anu.id)
+let participants = anu.participants
+
+for (let num of participants) {
+
+try {
+var ppuser = await sock.profilePictureUrl(num, 'image')
+} catch {
+var ppuser = 'https://telegra.ph/file/78757a3eb7a7da1a3cdb7.jpg'
+}
+
+// Function ini saya dapatkan dari Danta
+async function ppWelkom(sock) {
+   let font = await Jimp.loadFont('./name.fnt')
+     let mask = await Jimp.read('https://i.imgur.com/552kzaW.png')
+     let welcome = await Jimp.read("./asset/welkom/" + gmbrWrn) // Bisa pakai path bisa juga pakai url
+     let avatar = await Jimp.read(ppuser)
+     // let status = (await sock.fetchStatus(sender).catch(console.log) || {}).status?.slice(0, 30) || 'Tidak terdeteksi'
+     await avatar.resize(460, 460) 
+     await mask.resize(460, 460) 
+     await avatar.mask(mask) 
+     await welcome.resize(welcome.getWidth(), welcome.getHeight()) 
+     return await welcome.composite(avatar, 500, 230).getBufferAsync('image/png') 
+}
+
+let fotoProfil = await ppWelkom(sock)
+let chat = global.db.chats[anu.id] || {}
+
+if (anu.action == 'add') {
+console.log('welkom')
+let teks = (chat.setWelcome || '*Selamat datang di grup @subject*\n─────────────────\n*Nama: @user*\n*Pada: @tanggal*\n\n*Jangan lupa baca rules/deskripsi grup*\n─────────────────\n@desc').replace(/@subject/g, metadata.subject).replace(/@user/g, `@${num.split('@')[0]}`).replace(/@tanggal/g, `${tanggal(new Date())}`).replace(/@desc/g, `${metadata.desc}`).replace(/undefined/g, `Tidak ada deskripsi grup`)
+sock.sendMessage(anu.id, { image: await resize(fotoProfil, 480, 270), caption: teks, mentions : [num]})
+} else if (anu.action == 'remove') {
+console.log('waduh')
+let teks = (chat.setLeave || '*Sayonara* 👋\n─────────────────\n*Nama: @user*\n*Pada: @tanggal*\n\nTelah meninggalkan grup @subject').replace(/@subject/g, metadata.subject).replace(/@user/g, `@${num.split('@')[0]}`).replace(/@tanggal/g, `${tanggal(new Date())}`).replace(/@desc/g, `${metadata.desc}`)
+sock.sendMessage(anu.id, { image: { url: ppuser }, caption: teks, mentions : [num]})
+}
+}
+
+})
     
     sock.decodeJid = (jid) => {
         if (!jid)

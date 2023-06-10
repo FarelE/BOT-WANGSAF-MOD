@@ -23,7 +23,7 @@ import { v4 } from "uuid";
 import fetch from "node-fetch";
 import gis from "g-i-s";
 import moment from "moment-timezone";
-import yts from "yt-search";
+//import yts from "yt-search";
 //import knights from "knights-canvas";
 import { Configuration, OpenAIApi } from "openai";
 import { createTraceMoeAPIWrapper, MediaSize, SearchError } from "trace-moe-api";
@@ -2517,7 +2517,7 @@ console.log(result);
          return reply(`Informasi tidak ditemukan`)
       }
 break
-        
+        /*
 	    case 'yts': case 'ytsearch': {
                 if (!text) return kosong('Wielino salto');
                 let search = await yts(text)
@@ -2527,7 +2527,7 @@ break
                     teks += `\n❏ *No :* ${no++}\n❏ *Type :* ${i.type}\n❏ *Video ID :* ${i.videoId}\n❏ *Title :* ${i.title}\n❏ *Views :* ${i.views}\n❏ *Duration :* ${i.timestamp}\n❏ *Upload At :* ${i.ago}\n❏ *Author :* ${i.author.name}\n❏ *Url :* ${i.url}\n─────────────────────`
                 }
                 sock.sendMessage(m.chat, { image: { url: search.all[0].thumbnail },  caption: teks }, { quoted: m })
-/*
+
 // Versi list message
 await sleep(5000)
 let sections = []   
@@ -2547,7 +2547,7 @@ let sections = []
      }
      sections.push(list)   
      }
-  const sendm =  miku.sendMessage(
+  const sendm =  sock.sendMessage(
       from, 
       {
        text: "Silahkan klik menu list di bawah ini",
@@ -2557,10 +2557,12 @@ let sections = []
        sections
       }, { quoted : m }
     )
-    */
+    
     
             }
             break
+            */
+            
         // By Sansekai
         case "ai": case "openai": 
           try {

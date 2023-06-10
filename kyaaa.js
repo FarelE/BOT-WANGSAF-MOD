@@ -1,5 +1,5 @@
 import "./global-config.js"
-import baileys from "@adiwajshing/baileys";
+import baileys from "@whiskeysockets/baileys";
 const { proto, getContentType, downloadContentFromMessage } = baileys;
 import fs from "fs";
 import util from "util"; 

@@ -4,7 +4,7 @@ import pino from "pino";
 import fs from "fs";
 import FileType from "file-type";
 import kyaaa from "./kyaaa.js";
-const { default: WASocket, Browsers, useMultiFileAuthState, DisconnectReason, fetchLatestBaileysVersion, makeInMemoryStore, jidDecode, downloadContentFromMessage, generateWAMessageFromContent, generateForwardMessageContent, getContentType, generateWAMessage, proto } = (await import('@adiwajshing/baileys')).default
+const { default: WASocket, Browsers, useMultiFileAuthState, DisconnectReason, fetchLatestBaileysVersion, makeInMemoryStore, jidDecode, downloadContentFromMessage, generateWAMessageFromContent, generateForwardMessageContent, getContentType, generateWAMessage, proto } = (await import('@whiskeysockets/baileys')).default
 import { smsg, getBuffer, tanggal } from "./lib/myfunc.js";
 import { imageToWebp, videoToWebp, writeExifImg, writeExifVid, writeExif } from "./lib/exif.js";
 const setting = JSON.parse(fs.readFileSync('./setting.json'));
@@ -227,8 +227,8 @@ sock.sendMessage(anu.id, { image: { url: ppuser }, caption: teks, mentions : [nu
  /**
    * sendMessage v2
    * @param {String} chatId
-   * @param {import('@adiwajshing/baileys').AnyMessageContent} message
-   * @param {import('@adiwajshing/baileys').MiscMessageGenerationOptions} options
+   * @param {import('@whiskeysockets/baileys').AnyMessageContent} message
+   * @param {import('@whiskeysockets/baileys').MiscMessageGenerationOptions} options
    * @returns
    */
  sock.sendMessageV2 = async (chatId, message, options = {}) => {

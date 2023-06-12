@@ -23,7 +23,7 @@ import { v4 } from "uuid";
 import fetch from "node-fetch";
 import gis from "g-i-s";
 import moment from "moment-timezone";
-//import yts from "yt-search";
+import yts from "yt-search";
 //import knights from "knights-canvas";
 import { Configuration, OpenAIApi } from "openai";
 import { createTraceMoeAPIWrapper, MediaSize, SearchError } from "trace-moe-api";
@@ -2517,7 +2517,6 @@ console.log(result);
          return reply(`Informasi tidak ditemukan`)
       }
 break
-        /*
 	    case 'yts': case 'ytsearch': {
                 if (!text) return kosong('Wielino salto');
                 let search = await yts(text)
@@ -2528,6 +2527,7 @@ break
                 }
                 sock.sendMessage(m.chat, { image: { url: search.all[0].thumbnail },  caption: teks }, { quoted: m })
 
+/*
 // Versi list message
 await sleep(5000)
 let sections = []   
@@ -2557,11 +2557,10 @@ let sections = []
        sections
       }, { quoted : m }
     )
-    
+    */
     
             }
             break
-            */
             
         // By Sansekai
         case "ai": case "openai": 
@@ -4020,11 +4019,13 @@ Tanda < dan > tidak usah diikuti karena cuma sebagai pembatas saja
 (ℹ️) *Contoh penggunaan:*
 - ${prefix}peliharaan makan 1
 ------------------------------------------------------------------
-`
+reply(tekspet)
+/*
 let daftarvid = ["1", "2", "3", "4"]
 let acakvid = daftarvid[Math.floor(Math.random() * (daftarvid.length))]
 let gambarpet = fs.readFileSync(`./asset/kucing/${acakvid}.mp4`)
 sock.sendMessage(m.chat, { video: gambarpet, caption: tekspet}, { quoted: m })
+*/
 }
 }
 break

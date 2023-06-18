@@ -15,13 +15,11 @@ import toMs from "ms";
 // import ytdl from "ytdl-core";
 import NetworkSpeedCheck from "network-speed";
 const test = new NetworkSpeedCheck();
-import stringSimilarity from "string-similarity";
 import { Aki } from "aki-api";
 import cron from "node-cron";
 import Jimp from "jimp";
 import { v4 } from "uuid";
 import fetch from "node-fetch";
-import gis from "g-i-s";
 import moment from "moment-timezone";
 import yts from "yt-search";
 //import knights from "knights-canvas";
@@ -50,7 +48,6 @@ import cheerio from "cheerio";
 import { ai2d } from "./lib/jadianime.js";
 import { smsg, getBuffer, download, sleep, getRandom, parseMention, clockString, jsonformat, tanggal } from "./lib/myfunc.js";
 import { UploadFileUgu, webp2mp4File, TelegraPh } from "./lib/uploader.js";
-import { imageToWebp, videoToWebp, writeExifImg, writeExifVid, writeExif, addExif } from "./lib/exif.js";
 
 // Function uang, limit dll
 import atmnya from "./lib/atm.js";
@@ -1150,38 +1147,6 @@ resolve(hasil)
 })
 }
 
-async function pinterest(query) {
-	return new Promise((resolve, reject) => {
-	  let err = { status: 404, message: "Terjadi kesalahan" }
-	  gis({ searchTerm: query + ' site:id.pinterest.com', }, (er, res) => {
-	   if (er) return err
-	   let hasil = {
-		  status: 200,
-		  creator: 'chibot',
-		  result: []
-	   }
-	   res.forEach(x => hasil.result.push(x.url))
-	   resolve(hasil)
-	  })
-	})
-}
-
-async function zerochan(query) {
-	return new Promise((resolve, reject) => {
-	  let err = { status: 404, message: "Terjadi kesalahan" }
-	  gis({ searchTerm: query + ' site:zerochan.net', }, (er, res) => {
-	   if (er) return err
-	   let hasil = {
-		  status: 200,
-		  creator: 'Chibot & FarelAE',
-		  result: []
-	   }
-	   res.forEach(x => hasil.result.push(x.url))
-	   resolve(hasil)
-	  })
-	})
-}
-
 function quotesAnime() {
     return new Promise((resolve, reject) => {
         const page = Math.floor(Math.random() * 184)
@@ -1303,22 +1268,22 @@ const txtumum = `
 [ 📝 ] *MENU UMUM* [ 📝 ]
 
 ${nomor+=1}. ${prefix}fitur
-Info: cek jumlah fitur yang tersedia
-Cara: ketik ${prefix}fitur
+*Info:* cek jumlah fitur yang tersedia
+*Cara:* ketik ${prefix}fitur
 `
 
 const textsetting = `
 [ ⚙️ ] *MENU PENGATURAN* [ ⚙️ ]
 
 ${nomor+=1}. ${prefix}notifsholat
-Info: mengaktifkan atau menonaktifkan fitur untuk mengingatkan ketika datang waktu sholat
-Cara:
+*Info:* mengaktifkan atau menonaktifkan fitur untuk mengingatkan ketika datang waktu sholat
+*Cara:*
 - ketik ${prefix}notifsholat [private/grup] untuk mengaktifkan 
 - untuk menonaktifkan, ketik ulang ${prefix}notifsholat [private/grup]
 
 ${nomor+=1}. ${prefix}infoanim
-Info: mengaktifkan atau menonaktifkan fitur untuk memberikan informasi atau berita berita anime terbaru
-Cara:
+*Info:* mengaktifkan atau menonaktifkan fitur untuk memberikan informasi atau berita berita anime terbaru
+*Cara:*
 - ketik ${prefix}infoanim [private/grup] untuk mengaktifkan 
 - untuk menonaktifkan, ketik ulang ${prefix}infoanim [private/grup]
 `
@@ -1327,20 +1292,20 @@ const txtbuat = `
 [ 🎨 ]️ *MENU PEMBUAT* [ 🎨 ]
 
 ${nomor+=1}. ${prefix}sticker
-Info: membuat stiker dari foto yang dikirimkan
-Cara: kirim/balas pesan foto/video dengan caption ${prefix}sticker
+*Info:* membuat stiker dari foto yang dikirimkan
+*Cara:* kirim/balas pesan foto/video dengan caption ${prefix}sticker
 
 ${nomor+=1}. ${prefix}toimg
-Info: mengubah stiker menjadi foto
-Cara: balas pesan sticker dengan caption ${prefix}toimg
+*Info:* mengubah stiker menjadi foto
+*Cara:* balas pesan sticker dengan caption ${prefix}toimg
 
 ${nomor+=1}. ${prefix}tomp4
-Info: mengubah stiker bergerak menjadi foto
-Cara: balas pesan sticker bergerak dengan caption ${prefix}tomp4
+*Info:* mengubah stiker bergerak menjadi foto
+*Cara:* balas pesan sticker bergerak dengan caption ${prefix}tomp4
 
 ${nomor+=1}. ${prefix}qc
-Info: membuat sticker dengan gaya pesan
-Cara:
+*Info:* membuat sticker dengan gaya pesan
+*Cara:*
 - ketik ${prefix}qc teks --putih/hitam
 - balas pesan sticker atau image dengan caption ${prefix}qc teks --putih/hitam
 `
@@ -1349,8 +1314,8 @@ const txtanim = `
 [ 🇯🇵️ ] *MENU ANIME* [ 🇯🇵 ]
 
 ${nomor+=1}. Otakudesu
-Info: download, cek anime terbaru, dan mencari anime dari website otakudesu
-CMD:
+*Info:* download, cek anime terbaru, dan mencari anime dari website otakudesu
+*CMD:*
 - ${prefix}anime
 (mengecek anime terbaru atau sedang rilis di website otakudesu)
 
@@ -1358,116 +1323,110 @@ CMD:
 (mencari anime di website otakudesu berdasarkan judul)
 
 ${nomor+=1}. ${prefix}quotesanime
-Info: mengirimkan random quotes anime
-Cara: ketik ${prefix}quotesanime
+*Info:* mengirimkan random quotes anime
+*Cara:* ketik ${prefix}quotesanime
 
 ${nomor+=1}. ${prefix}jadianime
-Info: mengubah foto menjadi anime style
-Cara: kirim/balas pesan foto dengan caption ${prefix}jadianime atau ketik ${prefix}jadianime2 jika command yang pertama eror
+*Info:* mengubah foto menjadi anime style
+*Cara:* kirim/balas pesan foto dengan caption ${prefix}jadianime atau ketik ${prefix}jadianime2 jika command yang pertama eror
 `
 
 const txtcari = `
 [ 🔍 ] *MENU PENCARIAN* [ 🔍 ]
 
-${nomor+=1}. ${prefix}pinterest
-Info: mencari gambar dari website pinterest
-Cara:
-- ketik ${prefix}pinterest kata kunci
-- ketik ${prefix}pinterest kata kunci --jumlah
-
 ${nomor+=1}. ${prefix}yts
-Info: mencari video youtube beserta informasi dan linknya
-Cara: ketik ${prefix}yts nama video yutube
+*Info:* mencari video youtube beserta informasi dan linknya
+*Cara:* ketik ${prefix}yts nama video yutube
 `
 
 const txtgame = `
 [ 🎮 ] *MENU GAME* [ 🎮 ]
 
 ${nomor+=1}. ${prefix}akinator
-Info: akinator bisa membaca pikiran anda dan menebak karakter yang anda pikirkan!
-Cara: ketik ${prefix}akinator
+*Info:* akinator bisa membaca pikiran anda dan menebak karakter yang anda pikirkan!
+*Cara:* ketik ${prefix}akinator
 `
 
 const txtdown = `
 [ 📥 ] *MENU DOWNLOADER* [ 📥 ]
 
 ${nomor+=1}. ${prefix}ytmp3
-Info: download audio dari video youtube melalui link
-Cara: ketik ${prefix}ytmp3 link video youtube
+*Info:* download audio dari video youtube melalui link
+*Cara:* ketik ${prefix}ytmp3 link video youtube
 
 ${nomor+=1}. ${prefix}ytmp4
-Info: download video youtube melalui link
-Cara: ketik ${prefix}ytmp4 link video youtube
+*Info:* download video youtube melalui link
+*Cara:* ketik ${prefix}ytmp4 link video youtube
 
 ${nomor+=1}. ${prefix}gitclone
-Info: download repository dari link github
-Cara: ketik ${prefix}gitclone link repository github
+*Info:* download repository dari link github
+*Cara:* ketik ${prefix}gitclone link repository github
 `
 
 const txtinfo = `
 [ ℹ️ ] *MENU INFORMASI* [ ℹ️ ]
 
 ${nomor+=1}. ${prefix}animeinfo
-Info: memberikan informasi per-anime-an dari akun instagram @otaku_anime_indonesia
-Cara: ketik ${prefix}animeinfo
+*Info:* memberikan informasi per-anime-an dari akun instagram @otaku_anime_indonesia
+*Cara:* ketik ${prefix}animeinfo
 `
 
 const txtrpg = `
 [ 🗡 ] *MENU ADVENTURE* [ 🗡 ]
 
 ${nomor+=1}. ${prefix}adventure
-Info: menjelajah dan kalahkan monsternya!!
-Cara: ketik ${prefix}adventure
+*Info:* menjelajah dan kalahkan monsternya!!
+*Cara:* ketik ${prefix}adventure
 
 ${nomor+=1}. ${prefix}mancing
-Info: memancing dan menangkap hewan yang ada di air
-Cara: ketik ${prefix}mancing
+*Info:* memancing dan menangkap hewan yang ada di air
+*Cara:* ketik ${prefix}mancing
 
 ${nomor+=1}. ${prefix}nebang
-Info: kamu dapat menebang pohon agar mendapatkan kayu untuk dijual
-Cara: ketik ${prefix}nebang
+*Info:* kamu dapat menebang pohon agar mendapatkan kayu untuk dijual
+*Cara:* ketik ${prefix}nebang
 
 ${nomor+=1}. ${prefix}nambang
-Info: untuk mencari emas, besi atau semacamnya
-Cara: ketik ${prefix}nambang
+*Info:* untuk mencari emas, besi atau semacamnya
+*Cara:* ketik ${prefix}nambang
 
 ${nomor+=1}. ${prefix}lawan
-Info: bertarung dengan bos
-Cara: ketik ${prefix}lawan nama bos
+*Info:* bertarung dengan bos
+*Cara:* ketik ${prefix}lawan nama bos
 
 ${nomor+=1}. ${prefix}inventory
-Info: untul mengecek item yang sudah kamu dapatkan
-Cara: ketik ${prefix}inventory
+*Info:* untul mengecek item yang sudah kamu dapatkan
+*Cara:* ketik ${prefix}inventory
 
 ${nomor+=1}. ${prefix}use
-Info: untuk menggunakan item, seperti potion
-Cara: ketik ${prefix}use <nama item> <jumlah>
-Catatan: tanda < > tidak usah diikuti karena cuma sebagai pembatas saja
+*Info:* untuk menggunakan item, seperti potion
+*Cara:* ketik ${prefix}use <nama item> <jumlah>
+*Catatan:* tanda < > tidak usah diikuti karena cuma sebagai pembatas saja
 
 ${nomor+=1}. ${prefix}beli
-Info: beli sesuatu di toko adventure bot
-Cara: ketik ${prefix}beli <nama item> <jumlah item>
-Catatan: khusus untuk pembelian tools seperti pedang atau sacamnya, tidak usah diikuti dengan jumlah item yang akan di beli
+*Info:* beli sesuatu di toko adventure bot
+*Cara:* ketik ${prefix}beli <nama item> <jumlah item>
+*Catatan:* khusus untuk pembelian tools seperti pedang atau sacamnya, tidak usah diikuti dengan jumlah item yang akan di beli
 
 ${nomor+=1}. ${prefix}jual
-Info: untuk menjual item yang sudah kamu dapatkan
-Cara: ketik ${prefix}jual <nama item> <jumlah item>
+*Info:* untuk menjual item yang sudah kamu dapatkan
+*Cara:* ketik ${prefix}jual <nama item> <jumlah item>
 
 ${nomor+=1}. ${prefix}buka
-Info: untuk membuka box yang telah kamu dapatkan
-Cara: ketik ${prefix}buka <nama box>
+*Info:* untuk membuka box yang telah kamu dapatkan
+*Cara:* ketik ${prefix}buka <nama box>
 
 ${nomor+=1}. ${prefix}peliharaan
-Info: untuk mengecek peliharaan yang kamu punya, peliharaan dapat kamu dapatkan dengan membuka box
-Cara: ketik ${prefix}peliharaan
+*Info:* untuk mengecek peliharaan yang kamu punya, peliharaan dapat kamu dapatkan dengan membuka box
+*Cara:* ketik ${prefix}peliharaan
 
 ${nomor+=1}. ${prefix}profile
-Info: untuk mengecek progres kamu
-Cara: ketik ${prefix}profile
+*Info:* untuk mengecek progres kamu
+*Cara:* ketik ${prefix}profile
 
 ${nomor+=1}. ${prefix}leaderboard
-Info: untuk mengecek peringkat 10 besar para pengguna bot
-Cara: ketik ${prefix}leaderboard
+*Info:* untuk mengecek peringkat 10 besar para pengguna bot
+*Cara:* ketik ${prefix}leaderboard
 `
 
 const teksmenuall = `${txtumum}\n${textsetting}\n${txtbuat}\n${txtanim}\n${txtcari}\n${txtgame}\n${txtdown}\n${txtinfo}\n${txtrpg}`
@@ -3551,7 +3510,7 @@ break
         break
         case 'tes': // Cek data dari website agar mempermudah dalam membuat scraper
 const resp = await axios.get(
-  "https://guardiantales.com/news", // Kalau mau ganti link, tempatnya di sini
+  "https://storiesig.me/en/otaku_anime_indonesia/", // Kalau mau ganti link, tempatnya di sini
   {}
  );
  console.log(resp.data);
@@ -3823,12 +3782,6 @@ break
             }
             }
             break
-          case 'metastick': { // Stiker tidak bisa ditambahkan ke favorit
-            let img = await quoted.download()
-            let stiker = await addExif(img, namaBot, namaOwner)
-            sock.sendMessage(from,{ sticker: stiker }, { quoted: m })
-          }
-            break
 case 'ssweb':
 if (!text) return gadalink()
 if (!isUrl(args[0]) && !args[0].includes('www.')) return linkeror();
@@ -3836,26 +3789,6 @@ let apiflash = `9b9e84dfc18746d4a19d3afe109e9ea4` // Token coy, klo kagak ada ma
 let link = `https://api.apiflash.com/v1/urltoimage?access_key=${apiflash}&wait_until=page_loaded&url=${text}`
 sock.sendMessage(from, {image: {url: link}, caption: `Source: https://api.apiflash.com/v1/`}, {quoted: m})
 break
-			case 'pinterest':
-				if (!text) return reply(`Kirim perintah ${command} query atau ${command} query --jumlah\nContoh :\n${command} cecan atau ${command} cecan --10`)
-			    var jumlah;
-			    if (text.includes('--')) jumlah = text.split('--')[1]
-			    pinterest(text.replace('--'+jumlah, '')).then(async(data) => {
-				  if (text.includes('--')) {
-					if (data.result.length < jumlah) {
-					  jumlah = data.result.length
-					  reply(`Hanya ditemukan ${data.result.length}, foto segera dikirim`)
-					}
-					for (let i = 0; i < jumlah; i++) {
-					  sock.sendMessage(from, { image: { url: data.result[i] }})
-					}
-				  }
-				  if (text) {
-					var but = [{buttonId: `${prefix}${command} ${text}`, buttonText: { displayText: 'Foto selanjutnya' }, type: 1 }]
-					sock.sendMessage(from, { caption: `Hasil pencarian dari ${text}`, image: { url: pickRandom(data.result) }, buttons: but, footer: 'Pencet tombol dibawah untuk foto selanjutnya' }, { quoted: m })
-				  }
-				})
-			    break
 /*case 'join':{
 if(!isOwner) return reply(mess.only.owner)
 let link = q.startsWith("http")
@@ -4018,7 +3951,7 @@ Tanda < dan > tidak usah diikuti karena cuma sebagai pembatas saja
 
 (ℹ️) *Contoh penggunaan:*
 - ${prefix}peliharaan makan 1
-------------------------------------------------------------------
+------------------------------------------------------------------`
 reply(tekspet)
 /*
 let daftarvid = ["1", "2", "3", "4"]
@@ -4878,61 +4811,6 @@ break
               }
               sock.sendMessage(m.chat, { text: txt, mentions: parseMention(txt) }, { quoted: m })
               break
-              /*
-                        case 'toimage': case 'toimg': { // Membutuhkan ffmpeg
-                if (!quoted) return stiktutor1()
-                if (!/webp/.test(mime)) return stiktutor1()
-                          tunggu()
-await sleep(1000)
-                let media = await sock.downloadAndSaveMediaMessage(quoted)
-                let ran = await getRandom('.png')
-                exec(`ffmpeg -i ${media} ${ran}`, (err) => {
-                    fs.unlinkSync(media)
-                    if (err) return reply(`${err}`)
-                    let buffer = fs.readFileSync(ran)
-                    sock.sendMessage(m.chat, { image: buffer }, { quoted: m })
-                    fs.unlinkSync(ran)
-                })
-            }
-            break
-	        case 'tomp4': case 'tovideo': {
-	        if (!isPremium && checklimitUser(sender) <= 0) return limithabis()
-                if (!quoted) return stiktutor1()
-                if (!/webp/.test(mime)) return stiktutor1()
-            tunggu()
-await sleep(1000)
-                let media = await sock.downloadAndSaveMediaMessage(quoted)
-                let webpToMp4 = await webp2mp4File(media)
-                await sock.sendMessage(m.chat, { video: { url: webpToMp4.result } }, { quoted: m })
-                confirmlimit(sender, 1) // Memakai 1 limit
-                await fs.unlinkSync(media)
-            }
-            break
-                        case 'sticker': case 's': case 'stickergif': case 'sgif': {
-                        if (!isPremium && checklimitUser(sender) <= 0) return limithabis()
-            if (!isMedia) return stiktutor2()
-            if (!quoted) return stiktutor2()
-                if (/image/.test(mime)) {
-tunggu()
-                  await sleep(1000)
-                let media = await quoted.download()
-                let encmedia = await sock.sendImageAsSticker(m.chat, media, m, { packname: namaBot, author: namaOwner })
-                confirmlimit(sender, 1) // Memakai 1 limit
-                await fs.unlinkSync(encmedia)
-            } else if (/video/.test(mime)) {
-tunggu()
-                  await sleep(1000)
-                if ((quoted.msg || quoted).seconds > 11) return reply('Maksimal 10 detik!')
-                let media = await quoted.download()
-                let encmedia = await sock.sendVideoAsSticker(m.chat, media, m, { packname: namaBot, author: namaOwner })
-                confirmlimit(sender, 1) // Memakai 1 limit
-                await fs.unlinkSync(encmedia)
-            } else {
-                stiktutor2()
-                }
-            }
-            break
-            */
             case 'tourl': {
             if (!isPremium && checklimitUser(sender) <= 0) return limithabis()
               if (!isMedia) return stiktutor2()
